@@ -8,13 +8,13 @@ router.post('/offer', auth, async (req, res) => {
     try {
         const { name, proficiency, description } = req.body;
         const user = await User.findById(req.user.id);
-        
+
         user.skillsOffered.push({
             name,
             proficiency,
             description
         });
-        
+
         await user.save();
         res.json(user.skillsOffered);
     } catch (err) {
@@ -27,12 +27,12 @@ router.post('/want', auth, async (req, res) => {
     try {
         const { name, description } = req.body;
         const user = await User.findById(req.user.id);
-        
+
         user.skillsWanted.push({
             name,
             description
         });
-        
+
         await user.save();
         res.json(user.skillsWanted);
     } catch (err) {

@@ -119,16 +119,16 @@ export default function Messages() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg min-h-[600px]">
+    <div className="mx-auto px-4 py-8 container">
+      <div className="mx-auto max-w-6xl">
+        <div className="bg-white shadow-lg rounded-lg min-h-[600px]">
           <div className="grid grid-cols-12">
             {/* Conversations List */}
             <div className="col-span-4 border-r">
-              <div className="p-4 border-b flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Messages</h2>
+              <div className="flex justify-between items-center p-4 border-b">
+                <h2 className="font-semibold text-xl">Messages</h2>
                 {loading && (
-                  <div className="animate-spin h-5 w-5 text-indigo-600">
+                  <div className="w-5 h-5 text-indigo-600 animate-spin">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -136,28 +136,27 @@ export default function Messages() {
                   </div>
                 )}
               </div>
-              <div className="overflow-y-auto h-[calc(600px-64px)]">
+              <div className="h-[calc(600px-64px)] overflow-y-auto">
                 {conversations.map((conv) => (
                   <div
                     key={conv.user._id}
                     onClick={() => setSelectedUser(conv.user)}
-                    className={`p-4 border-b cursor-pointer hover:bg-gray-50 ${
-                      selectedUser?._id === conv.user._id ? 'bg-gray-50' : ''
-                    }`}
+                    className={`p-4 border-b cursor-pointer hover:bg-gray-50 ${selectedUser?._id === conv.user._id ? 'bg-gray-50' : ''
+                      }`}
                   >
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-medium">{conv.user.username}</h3>
-                        <p className="text-sm text-gray-600 truncate">
+                        <p className="text-gray-600 text-sm truncate">
                           {conv.lastMessage}
                         </p>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-gray-500 text-xs">
                         {formatDate(conv.timestamp)}
                       </div>
                     </div>
                     {conv.unread > 0 && (
-                      <span className="inline-block bg-indigo-600 text-white text-xs px-2 py-1 rounded-full mt-2">
+                      <span className="inline-block bg-indigo-600 mt-2 px-2 py-1 rounded-full text-white text-xs">
                         {conv.unread} new
                       </span>
                     )}
@@ -173,16 +172,16 @@ export default function Messages() {
                   <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
                       <div>
-                        <h3 className="text-xl font-semibold">
+                        <h3 className="font-semibold text-xl">
                           {selectedUser.username}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-gray-500 text-sm">
                           {formatLastActive(selectedUser.lastActive)}
                         </p>
                       </div>
                       <div className="flex items-center space-x-4">
                         {isLoadingMessages && (
-                          <div className="animate-spin h-5 w-5 text-indigo-600">
+                          <div className="w-5 h-5 text-indigo-600 animate-spin">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -200,30 +199,27 @@ export default function Messages() {
                   </div>
 
                   <div className="flex flex-col h-[calc(600px-144px)]">
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    <div className="flex-1 space-y-4 p-4 overflow-y-auto">
                       {messages.map((message) => (
                         <div
                           key={message._id}
-                          className={`flex ${
-                            message.sender._id === user?._id
+                          className={`flex ${message.sender._id === user?._id
                               ? 'justify-end'
                               : 'justify-start'
-                          }`}
+                            }`}
                         >
                           <div
-                            className={`max-w-[70%] rounded-lg p-3 ${
-                              message.sender._id === user?._id
+                            className={`max-w-[70%] rounded-lg p-3 ${message.sender._id === user?._id
                                 ? 'bg-indigo-600 text-white'
                                 : 'bg-gray-100'
-                            }`}
+                              }`}
                           >
                             <p>{message.content}</p>
                             <p
-                              className={`text-xs mt-1 ${
-                                message.sender._id === user?._id
+                              className={`text-xs mt-1 ${message.sender._id === user?._id
                                   ? 'text-indigo-100'
                                   : 'text-gray-500'
-                              }`}
+                                }`}
                             >
                               {formatDate(message.createdAt)}
                             </p>
@@ -245,7 +241,7 @@ export default function Messages() {
                         <button
                           type="submit"
                           disabled={loading}
-                          className="btn-primary px-6"
+                          className="px-6 btn-primary"
                         >
                           {loading ? 'Sending...' : 'Send'}
                         </button>
@@ -254,7 +250,7 @@ export default function Messages() {
                   </div>
                 </>
               ) : (
-                <div className="h-full flex items-center justify-center text-gray-500">
+                <div className="flex justify-center items-center h-full text-gray-500">
                   Select a conversation to start messaging
                 </div>
               )}
@@ -263,7 +259,7 @@ export default function Messages() {
         </div>
 
         {error && (
-          <div className="mt-4 bg-red-50 border-l-4 border-red-400 p-4">
+          <div className="bg-red-50 mt-4 p-4 border-red-400 border-l-4">
             <p className="text-red-700">{error}</p>
           </div>
         )}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { skillCategories } from '../data/skillsList';
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
             Unlock Your Potential with <span className="text-indigo-600">SkillSwap</span>
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-gray-600 text-xl leading-relaxed">
-            Join thousands of learners and experts sharing knowledge in our vibrant community. 
+            Join thousands of learners and experts sharing knowledge in our vibrant community.
             Teach what you know, learn what you love.
           </p>
           <div className="space-x-4">
@@ -75,6 +76,50 @@ export default function Home() {
             <h3 className="mb-2 font-semibold">Learn & Teach</h3>
             <p className="text-gray-600">Exchange skills and grow together</p>
           </div>
+        </div>
+
+        {/* Categories Section */}
+        <div className="mb-20">
+          <h2 className="mb-12 font-bold text-gray-900 text-3xl text-center">
+            Explore Skills by Category
+          </h2>
+          <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Object.entries(skillCategories).map(([category, skills]) => (
+              <div key={category} className="bg-white shadow-lg hover:shadow-xl p-6 rounded-xl transition-shadow">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-semibold text-gray-900 text-xl">{category}</h3>
+                  <span className="font-medium text-indigo-600 text-sm">{skills.length} skills</span>
+                </div>
+                <div className="space-y-2">
+                  {skills.slice(0, 3).map(skill => (
+                    <p key={skill} className="text-gray-600">{skill}</p>
+                  ))}
+                </div>
+                <Link
+                  to={`/skills?category=${category}`}
+                  className="inline-block mt-4 font-medium text-indigo-600 hover:text-indigo-700"
+                >
+                  View all {category} skills →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="bg-indigo-50 mb-20 p-12 rounded-2xl text-center">
+          <h2 className="mb-6 font-bold text-gray-900 text-3xl">
+            Ready to Start Your Learning Journey?
+          </h2>
+          <p className="mx-auto mb-8 max-w-2xl text-gray-600">
+            Join our community today and start exchanging skills with passionate learners and teachers from around the world.
+          </p>
+          <Link
+            to="/register"
+            className="inline-block bg-indigo-600 hover:bg-indigo-700 px-8 py-4 rounded-lg font-semibold text-white transition-colors"
+          >
+            Get Started Now
+          </Link>
         </div>
       </div>
     </div>

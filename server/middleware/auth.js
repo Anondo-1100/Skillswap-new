@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const auth = async (req, res, next) => {
     try {
@@ -9,6 +10,13 @@ const auth = async (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-default-secret');
+        const user = await User.findById(decoded.userId);
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        req.user = user;
         req.userId = decoded.userId;
         next();
     } catch (error) {
@@ -16,4 +24,15 @@ const auth = async (req, res, next) => {
     }
 };
 
-module.exports = auth;
+const requireAdmin = async (req, res, next) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Admin access required' });
+        }
+        next();
+    } catch (error) {
+        res.status(403).json({ message: 'Admin access required' });
+    }
+};
+
+module.exports = { auth, requireAdmin };

@@ -18,29 +18,29 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/skills" element={<SearchSkills />} />
-          <Route 
-            path="/messages" 
+          <Route
+            path="/messages"
             element={
               <ProtectedRoute>
                 <Messages />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/profile" 
+          <Route
+            path="/profile"
             element={
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/profile/:userId" 
+          <Route
+            path="/profile/:userId"
             element={
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
-            } 
+            }
           />
         </Routes>
       </div>

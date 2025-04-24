@@ -10,7 +10,7 @@ export function useNotifications() {
       const conversations = await getConversations();
       const count = conversations.reduce((total, conv) => total + conv.unread, 0);
       setUnreadCount(count);
-      
+
       // Update browser tab title
       document.title = count > 0 ? `(${count}) SkillSwap` : 'SkillSwap';
     } catch (err) {

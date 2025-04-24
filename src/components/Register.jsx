@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ export default function Register() {
     confirmPassword: '',
     skills: []
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { register } = useAuth();
@@ -53,7 +56,7 @@ export default function Register() {
               <p className="text-red-700">{error}</p>
             </div>
           )}
-          
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="username" className="block font-medium text-gray-700 text-sm">
@@ -93,16 +96,27 @@ export default function Register() {
               <label htmlFor="password" className="block font-medium text-gray-700 text-sm">
                 Password
               </label>
-              <div className="mt-1">
+              <div className="relative mt-1">
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
                   onChange={handleChange}
                   className="block shadow-sm px-3 py-2 border border-gray-300 focus:border-indigo-500 rounded-md focus:outline-none focus:ring-indigo-500 w-full appearance-none placeholder-gray-400"
                 />
+                <button
+                  type="button"
+                  className="right-0 absolute inset-y-0 flex items-center pr-3"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5 text-gray-400" />
+                  )}
+                </button>
               </div>
             </div>
 
@@ -110,16 +124,27 @@ export default function Register() {
               <label htmlFor="confirmPassword" className="block font-medium text-gray-700 text-sm">
                 Confirm Password
               </label>
-              <div className="mt-1">
+              <div className="relative mt-1">
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="block shadow-sm px-3 py-2 border border-gray-300 focus:border-indigo-500 rounded-md focus:outline-none focus:ring-indigo-500 w-full appearance-none placeholder-gray-400"
                 />
+                <button
+                  type="button"
+                  className="right-0 absolute inset-y-0 flex items-center pr-3"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeSlashIcon className="w-5 h-5 text-gray-400" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5 text-gray-400" />
+                  )}
+                </button>
               </div>
             </div>
 

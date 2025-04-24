@@ -1,31 +1,41 @@
-export default function SkillCard({ skill, type = 'offered', onDelete }) {
-  const proficiencyColors = {
-    Beginner: 'bg-green-100 text-green-800',
-    Intermediate: 'bg-blue-100 text-blue-800',
-    Advanced: 'bg-purple-100 text-purple-800',
-    Expert: 'bg-pink-100 text-pink-800'
-  };
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
+const SkillCard = ({ skill, category }) => {
   return (
-    <div className="bg-white rounded-lg shadow p-4 relative hover:shadow-md transition-shadow">
-      <button
-        onClick={() => onDelete(skill._id)}
-        className="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-        aria-label="Delete skill"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-      </button>
-      <h4 className="font-semibold text-lg mb-2">{skill.name}</h4>
-      {type === 'offered' && skill.proficiency && (
-        <span className={`inline-block px-2 py-1 text-sm rounded-full ${proficiencyColors[skill.proficiency]}`}>
-          {skill.proficiency}
-        </span>
-      )}
-      {skill.description && (
-        <p className="text-gray-600 mt-2 text-sm">{skill.description}</p>
-      )}
+    <div className="bg-white shadow-md hover:shadow-lg rounded-lg overflow-hidden transition-shadow duration-200">
+      <div className="p-6">
+        <div className="flex justify-between items-start">
+          <div>
+            <h3 className="mb-2 font-semibold text-gray-900 text-xl">{skill}</h3>
+            <span className="inline-block bg-indigo-100 px-3 py-1 rounded-full text-indigo-700 text-sm">
+              {category}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex justify-end space-x-3 mt-4">
+          <Link
+            to={`/search?skill=${encodeURIComponent(skill)}`}
+            className="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 shadow-sm px-4 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium text-white text-sm"
+          >
+            Find Teachers
+          </Link>
+          <Link
+            to={`/search?skill=${encodeURIComponent(skill)}&mode=learn`}
+            className="inline-flex items-center bg-white hover:bg-indigo-50 shadow-sm px-4 py-2 border border-indigo-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium text-indigo-600 text-sm"
+          >
+            Learn This
+          </Link>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+SkillCard.propTypes = {
+  skill: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired
+};
+
+export default SkillCard;

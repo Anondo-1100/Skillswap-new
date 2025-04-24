@@ -22,7 +22,7 @@ router.post('/', auth, async (req, res) => {
         });
 
         await message.save();
-        
+
         // Populate sender and recipient information
         await message.populate([
             { path: 'sender', select: 'username' },
@@ -45,26 +45,26 @@ router.get('/conversations', auth, async (req, res) => {
                 { recipient: req.userId }
             ]
         })
-        .sort('-createdAt')
-        .populate('sender', 'username')
-        .populate('recipient', 'username');
+            .sort('-createdAt')
+            .populate('sender', 'username')
+            .populate('recipient', 'username');
 
         // Get unique conversations with last message and unread count
         const conversations = [];
         const processedUsers = new Set();
 
         messages.forEach(msg => {
-            const otherUser = msg.sender._id.toString() === req.userId 
-                ? msg.recipient 
+            const otherUser = msg.sender._id.toString() === req.userId
+                ? msg.recipient
                 : msg.sender;
-            
+
             const otherUserId = otherUser._id.toString();
-            
+
             if (!processedUsers.has(otherUserId)) {
                 processedUsers.add(otherUserId);
-                
+
                 // Count unread messages from this user
-                const unreadCount = messages.filter(m => 
+                const unreadCount = messages.filter(m =>
                     m.sender._id.toString() === otherUserId &&
                     m.recipient._id.toString() === req.userId &&
                     !m.read
@@ -97,14 +97,14 @@ router.get('/:userId', auth, async (req, res) => {
                 { sender: req.params.userId, recipient: req.userId }
             ]
         })
-        .sort('createdAt')
-        .populate('sender', 'username')
-        .populate('recipient', 'username');
+            .sort('createdAt')
+            .populate('sender', 'username')
+            .populate('recipient', 'username');
 
         // Mark messages as read in a separate operation
         await Message.updateMany(
-            { 
-                sender: req.params.userId, 
+            {
+                sender: req.params.userId,
                 recipient: req.userId,
                 read: false
             },
@@ -124,7 +124,7 @@ router.get('/unread/count', auth, async (req, res) => {
             recipient: req.userId,
             read: false
         });
-        
+
         res.json({ count });
     } catch (error) {
         res.status(400).json({ message: error.message });
