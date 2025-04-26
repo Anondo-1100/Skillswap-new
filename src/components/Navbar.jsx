@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useNotifications } from '../hooks/useNotifications';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../hooks/useNotifications";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,8 +21,17 @@ export default function Navbar() {
           {/* Desktop menu */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4 ml-10">
-              <Link to="/skills" className="hover:bg-indigo-500 px-3 py-2 rounded-md">
+              <Link
+                to="/skills"
+                className="hover:bg-indigo-500 px-3 py-2 rounded-md"
+              >
                 Browse Skills
+              </Link>
+              <Link
+                to="/skillswap"
+                className="hover:bg-indigo-500 px-3 py-2 rounded-md"
+              >
+                Sundown
               </Link>
               {user ? (
                 <>
@@ -37,7 +46,10 @@ export default function Navbar() {
                       </span>
                     )}
                   </Link>
-                  <Link to="/profile" className="hover:bg-indigo-500 px-3 py-2 rounded-md">
+                  <Link
+                    to="/profile"
+                    className="hover:bg-indigo-500 px-3 py-2 rounded-md"
+                  >
                     Profile
                   </Link>
                   <button
@@ -49,7 +61,10 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="hover:bg-indigo-500 px-3 py-2 rounded-md">
+                  <Link
+                    to="/login"
+                    className="hover:bg-indigo-500 px-3 py-2 rounded-md"
+                  >
                     Login
                   </Link>
                   <Link
