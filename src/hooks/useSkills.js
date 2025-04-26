@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+// Using relative URL for API calls
+const API_URL = '/api';
 
 export function useSkills() {
   const [loading, setLoading] = useState(false);

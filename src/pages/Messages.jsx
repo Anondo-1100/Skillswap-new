@@ -90,7 +90,7 @@ export default function Messages() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:5000/api/users/${userId}`,
+        `/api/users/${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSelectedUser(response.data);

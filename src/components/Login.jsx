@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/profile');
+      navigate('/'); // Changed from '/profile' to '/'
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred during login');
     }

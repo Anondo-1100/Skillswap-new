@@ -1,55 +1,100 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { auth } from '../components/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'firebase/auth';
 import axios from 'axios';
 
 const AuthContext = createContext({});
+const API_URL = '/api';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUser = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const response = await axios.get('http://localhost:5000/api/users/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error refreshing user:', error);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Get token from Firebase
+        const token = await firebaseUser.getIdToken();
+        // Store token
+        localStorage.setItem('token', token);
+
+        try {
+          // Get additional user data from your backend
+          const response = await axios.get(`${API_URL}/users/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUser({ ...firebaseUser, ...response.data });
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
         localStorage.removeItem('token');
         setUser(null);
       }
-    }
-  };
+      setLoading(false);
+    });
 
-  useEffect(() => {
-    refreshUser();
-    setLoading(false);
+    return () => unsubscribe();
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('http://localhost:5000/api/users/login', {
-      email,
-      password,
-    });
-    const { token, user } = response.data;
-    localStorage.setItem('token', token);
-    setUser(user);
-    return user;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem('token', token);
+      return userCredential.user;
+    } catch (error) {
+      throw error;
+    }
   };
 
   const register = async (userData) => {
-    const response = await axios.post('http://localhost:5000/api/users/register', userData);
-    const { token, user } = response.data;
-    localStorage.setItem('token', token);
-    setUser(user);
-    return user;
+    try {
+      const { email, password, username } = userData;
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem('token', token);
+
+      // Create user profile in your backend
+      await axios.post(`${API_URL}/users/profile`,
+        { username },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      return userCredential.user;
+    } catch (error) {
+      throw error;
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem('token');
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const refreshUser = async () => {
+    if (auth.currentUser) {
+      const token = await auth.currentUser.getIdToken(true);
+      localStorage.setItem('token', token);
+      try {
+        const response = await axios.get(`${API_URL}/users/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUser({ ...auth.currentUser, ...response.data });
+      } catch (error) {
+        console.error('Error refreshing user:', error);
+      }
+    }
   };
 
   const value = {

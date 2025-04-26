@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ export default function Register() {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
@@ -31,9 +33,12 @@ export default function Register() {
         password: formData.password,
         skills: formData.skills
       });
+      toast.success('Registration successful!');
       navigate('/profile');
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred during registration');
+      const errorMessage = err.response?.data?.message || 'An error occurred during registration';
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

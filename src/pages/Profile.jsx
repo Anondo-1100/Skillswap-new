@@ -23,7 +23,7 @@ export default function Profile() {
         setFetchError(null);
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+          const response = await axios.get(`/api/users/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setProfileUser(response.data);
